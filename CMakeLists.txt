@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.4)
-project(VTKExodusReaderExample)
+project(FDHTApp)
 
 FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(QT5GUI)
@@ -158,4 +158,3 @@ SET(CPACK_SOURCE_IGNORE_FILES "${CMAKE_SOURCE_DIR}/.git/")
 #--------------------------------------------------------------------------------
 # This must be included last.  This does all the work.
 INCLUDE(CPack)
-
