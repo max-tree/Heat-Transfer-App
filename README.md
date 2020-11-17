@@ -2,6 +2,8 @@
 
 This branch is to store the process of how to use CoolProps library for thermodynamic properties. The instructions were made by Dr. McBride.
 
+INSTRUCTIONS:
+
 1.Close QtCreator
 
 2.Go to Python.org and download and install python 3.9.0 for windows.  It will be installed in something like c:\users\<username>\AppData\Local\Programs\Python\Python39\python.exe
@@ -29,7 +31,7 @@ This branch is to store the process of how to use CoolProps library for thermody
 13.Build again.
 
 
-CMakeList.txt file additions:
+CMakeList.txt FILE ADDITIONS:
 
 set(COOLPROP_STATIC_LIBRARY true)
 add_subdirectory ("${CMAKE_SOURCE_DIR}/CoolProp" CoolProp)
