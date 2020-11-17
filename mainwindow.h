@@ -17,6 +17,7 @@
 #include <QVTKOpenGLWidget.h>
 #include <vtkSmartPointer.h>
 #include <vtkPlane.h>
+#include <array>
 
 namespace Ui {
 class MainWindow;
@@ -29,6 +30,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void create_layout();
+    void add_window_to_rendering();
+    void set_background_render(std::array <double,3> color);
+
 
 protected slots:
     void setup();
@@ -36,7 +41,7 @@ protected slots:
 private:
     Ui::MainWindow *ui;
     QVTKOpenGLWidget* mQVtkWidget;
-
+    std::array <double,3> lightGrey{0.8,0.8,0.8};
     vtkNew<vtkRenderer> mRenderer;
 };
 

@@ -47,18 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     mQVtkWidget= new QVTKOpenGLWidget(this);
 
-    QGridLayout* layout = new QGridLayout(ui->frame);
-    layout->addWidget(mQVtkWidget,1,1);
-    ui->frame->setLayout(layout);
-
-    vtkNew<vtkGenericOpenGLRenderWindow> window;
-    mQVtkWidget->SetRenderWindow(window);
-
-    window->AddRenderer(mRenderer);
-    setup();
-    mRenderer->GradientBackgroundOn();
-    mRenderer->SetBackground(1,1,1);
-    mRenderer->SetBackground2(0,0,0);
+    create_layout();
+    add_window_to_rendering();
+    set_background_render(lightGrey);
 }
 
 MainWindow::~MainWindow()
@@ -142,3 +133,28 @@ void MainWindow::setup()
 
     this->mQVtkWidget->GetRenderWindow()->Render();
 }
+
+void MainWindow::create_layout()
+{
+    QGridLayout* layout = new QGridLayout(ui->frame);
+    layout->addWidget(mQVtkWidget,1,1);
+    ui->frame->setLayout(layout);
+}
+
+
+void MainWindow::add_window_to_rendering()
+{
+    vtkNew<vtkGenericOpenGLRenderWindow> window;
+    mQVtkWidget->SetRenderWindow(window);
+    window->AddRenderer(mRenderer);
+
+    setup();
+}
+
+
+void MainWindow::set_background_render(std::array <double,3> color)
+{
+//    mRenderer->GradientBackgroundOn();
+    mRenderer->SetBackground(color[0],color[1],color[2]);
+}
+
