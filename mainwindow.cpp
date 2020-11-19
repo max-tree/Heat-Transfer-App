@@ -11,34 +11,7 @@
 //-------------------------------------------------------
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <vtkCamera.h>
-#include <vtkVersion.h>
-#include <vtkSmartPointer.h>
-#include <vtkInteractorStyleUser.h>
-#include <vtkProperty.h>
-#include <vtkCommand.h>
-#include <vtkPointData.h>
-#include <vtkActor.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkXMLUnstructuredGridReader.h>
-#include <vtkDoubleArray.h>
-#include <vtkDataSetMapper.h>
-#include <vtkClipDataSet.h>
-#include <vtkPlane.h>
-#include <vtkUnstructuredGrid.h>
-#include <vtkScalarBarActor.h>
-#include <vtkLookupTable.h>
-#include <QFileDialog>
-#include <vtkGenericOpenGLRenderWindow.h>
-#include <QVector3D>
-#include <QVTKOpenGLWidget.h>
-#include <vtkExodusIIReader.h>
-#include <vtkCompositeDataGeometryFilter.h>
-#include <vtkMultiBlockDataSet.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkCompositeDataIterator.h>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     mQVtkWidget= new QVTKOpenGLWidget(this);
-
     create_layout();
-    add_window_to_rendering();
+    add_window_to_rendering(); 
+    setup();
     set_background_render(lightGrey);
 }
 
@@ -59,79 +32,39 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup()
 {
-    //Open mesh file.
-    QString filename=QFileDialog::getOpenFileName(this,"Open Mesh File","","*.e;;*.exo");
+    QString filename = read_in_filename();
 
     if(filename.isEmpty())
         return;
+
     vtkNew<vtkExodusIIReader> reader;
-    reader->SetFileName(filename.toStdString().c_str());
-    reader->UpdateInformation();
-    reader->SetTimeStep(0);
-    reader->SetAllArrayStatus(vtkExodusIIReader::NODAL, 1);
+    configure_reader(reader, filename);
+    iterate(reader);
+    create_geometry(reader);
 
+    render_this_instance();
+}
 
-    reader->Update();
-    vtkSmartPointer<vtkCompositeDataSet> input= reader->GetOutput();
+void MainWindow::add_window_to_rendering()
+{
+    vtkNew<vtkGenericOpenGLRenderWindow> window;
+    mQVtkWidget->SetRenderWindow(window);
+    window->AddRenderer(mRenderer);
+}
 
-    vtkCompositeDataIterator* iter = input->NewIterator();
-    for (iter->InitTraversal(); !iter->IsDoneWithTraversal(); iter->GoToNextItem())
-      {
-        vtkUnstructuredGrid* unstructuredGrid = vtkUnstructuredGrid::SafeDownCast(iter->GetCurrentDataObject());
-
-        if(unstructuredGrid)
-        {
-            //Create a new data array
-            vtkNew<vtkDoubleArray> data;
-            data->SetName("CustomData");
-
-            vtkNew<vtkPointData> pointData;
-            // unstructuredGrid->
-            //Set the new data on the mesh
-            unstructuredGrid->GetPointData()->SetScalars(data);
-            //Specify that the scalar we want to color by is our custom data.
-            unstructuredGrid->GetPointData()->SetActiveScalars("CustomData");
-
-
-            //Fill in the data with values of interest.
-            //One value for each point.
-            vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
-            vtkIdType number_points= points->GetNumberOfPoints();
-            for(vtkIdType i=0;i<number_points;i++)
-            {
-                double pt[3];
-                points->GetPoint(i,pt);
-
-                //Calculate the custom data.
-                //For this example we are using the distance from the origin.
-                //Calculate the distance from origin.
-                QVector3D vec(pt[0],pt[1],pt[2]);
-                double length = vec.length();
-
-                //Insert the custom data into the data array.
-                data->InsertNextValue(length);
-            }
-        }
-    }
-    iter->Delete();
-
-    // Create Geometry
-    vtkNew<vtkCompositeDataGeometryFilter> geometry;
-    geometry->SetInputConnection(reader->GetOutputPort());
-
-    // Mapper
-    vtkNew<vtkPolyDataMapper> mapper;
-    mapper->SetInputConnection(geometry->GetOutputPort());
-    mapper->SetColorModeToDefault();
-    mapper->SetScalarVisibility(1);
-
-    // Actor
+void MainWindow::create_actor(vtkPolyDataMapper* mapper)
+{
     vtkNew<vtkActor> actor;
     actor->SetMapper(mapper);
     mRenderer->AddActor(actor);
     mRenderer->ResetCamera();
+}
 
-    this->mQVtkWidget->GetRenderWindow()->Render();
+void MainWindow::create_geometry(vtkExodusIIReader* reader)
+{
+    vtkNew<vtkCompositeDataGeometryFilter> geometry;
+    geometry->SetInputConnection(reader->GetOutputPort());
+    create_mapper(geometry);
 }
 
 void MainWindow::create_layout()
@@ -141,16 +74,50 @@ void MainWindow::create_layout()
     ui->frame->setLayout(layout);
 }
 
-
-void MainWindow::add_window_to_rendering()
+void MainWindow::create_mapper(vtkCompositeDataGeometryFilter* geometry)
 {
-    vtkNew<vtkGenericOpenGLRenderWindow> window;
-    mQVtkWidget->SetRenderWindow(window);
-    window->AddRenderer(mRenderer);
-
-    setup();
+    vtkNew<vtkPolyDataMapper> mapper;
+    mapper->SetInputConnection(geometry->GetOutputPort());
+//    mapper->SetColorModeToDefault();
+    mapper->SetColorMode(1);
+    mapper->SetScalarVisibility(1);
+    create_actor(mapper);
 }
 
+void MainWindow::iterate(vtkExodusIIReader* reader)
+{
+    vtkSmartPointer<vtkCompositeDataSet> input = reader->GetOutput();
+    vtkCompositeDataIterator* iter = input->NewIterator();
+    for (iter->InitTraversal(); !iter->IsDoneWithTraversal(); iter->GoToNextItem())
+      {
+        vtkUnstructuredGrid* unstructuredGrid = vtkUnstructuredGrid::SafeDownCast(iter->GetCurrentDataObject());
+
+        if(unstructuredGrid)
+        {
+            vtkNew<vtkDoubleArray> data;
+            data->SetName("CustomData");
+
+            vtkNew<vtkPointData> pointData;
+            set_the_new_data_on_the_mesh(unstructuredGrid, data);
+            //Specify that the scalar we want to color by is our custom data.
+            unstructuredGrid->GetPointData()->SetActiveScalars("CustomData");
+
+            fill_data_array(unstructuredGrid, data);
+        }
+    }
+    iter->Delete();
+}
+
+QString MainWindow::read_in_filename()
+{
+   QString filename = QFileDialog::getOpenFileName(this,"Open Mesh File","","*.e;;*.exo");
+   return filename;
+}
+
+void MainWindow::render_this_instance()
+{
+    this->mQVtkWidget->GetRenderWindow()->Render();
+}
 
 void MainWindow::set_background_render(std::array <double,3> color)
 {
@@ -158,3 +125,38 @@ void MainWindow::set_background_render(std::array <double,3> color)
     mRenderer->SetBackground(color[0],color[1],color[2]);
 }
 
+double calculate_distance_from_the_origin(double pt[3])
+{
+    QVector3D vec(pt[0],pt[1],pt[2]);
+    double length = vec.length();
+    return length;
+}
+
+void configure_reader(vtkExodusIIReader* reader, QString filename)
+{
+    reader->SetFileName(filename.toStdString().c_str());
+    reader->UpdateInformation();
+    reader->SetTimeStep(0);
+    reader->SetAllArrayStatus(vtkExodusIIReader::NODAL, 1);
+    reader->Update();
+}
+
+void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
+{
+    vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
+    vtkIdType number_points= points->GetNumberOfPoints();
+    for(vtkIdType i=0;i<number_points;i++)
+    {
+        double pt[3];
+        points->GetPoint(i,pt);
+
+        double length = calculate_distance_from_the_origin(pt);
+
+        data->InsertNextValue(length);
+    }
+}
+
+void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
+{
+    unstructuredGrid->GetPointData()->SetScalars(data);
+}
