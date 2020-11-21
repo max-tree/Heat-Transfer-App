@@ -5,14 +5,32 @@ FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(QT5GUI)
 FIND_PACKAGE(QT5OpenGL)
 FIND_PACKAGE(VTK REQUIRED)
+FIND_PACKAGE(GTest REQUIRED)
+
 include(${VTK_USE_FILE})
 
 include_directories(${VTK_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIRS})
 
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 SET(CMAKE_AUTORCC ON)
+
+add_library(heatTransfer STATIC
+    heatTransferFD.cpp
+    heatTransferFD.h
+)
+
+add_executable(HTFD_UnitTests
+interiorNode_UnitTest.cpp
+)
+
+target_link_libraries(HTFD_UnitTests
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    heatTransfer
+)
 
 SET(MYSOURCE
     main.cpp
@@ -30,6 +48,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Gui
     Qt5::OpenGL
     ${VTK_LIBRARIES}
+    heatTransfer
     )
 
 
