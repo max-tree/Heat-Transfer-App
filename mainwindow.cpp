@@ -144,7 +144,9 @@ void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data
 {
     vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
     vtkIdType number_points= points->GetNumberOfPoints();
-
+    //create a for loop here that goes through all the data points like in the for loop below. Instead of giving the data
+    //a value, fill in a class with node info. Get lengths between nodes, identify node types, derivev equations/store
+    //all of the equations in a matrix, perform matrix math, then do the for loop below to fill in the data.
     for(vtkIdType index=0;index<number_points;index++)
     {
         double pt[3];
