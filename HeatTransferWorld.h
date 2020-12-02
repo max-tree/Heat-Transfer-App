@@ -29,7 +29,7 @@ public:
     HeatTransferWorld(){}
     ~HeatTransferWorld(){}
     std::array <double,6> get_node_equation_coefficients();
-    void get_node_equation(int nodeIndexNum);
+    void get_node_equation(int nodeCaseIdNum);
     void set_convection_coefficient(double hNew);
     double get_convection_coefficient();
     double get_deltaX();
@@ -40,7 +40,7 @@ public:
     void set_free_stream_temperature(double freeStreamTempNew);
 
 private:
-    std::array <double,6> nodeValues{0.0,0.0,0.0,0.0,0.0,0.0};
+    std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
     double h{0.0};
     double deltaX{1.0};
     double deltaY{deltaX};

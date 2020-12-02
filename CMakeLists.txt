@@ -20,10 +20,13 @@ SET(CMAKE_AUTORCC ON)
 add_library(heatTransfer STATIC
     HeatTransferWorld.h
     HeatTransferWorld.cpp
+    HeatTransferNode.h
+    HeatTransferNode.cpp
 )
 
 add_executable(HTFD_UnitTests
 GetNodeEquation_UnitTest.cpp
+IdentifyHeatTransferNodeCase_UnitTest.cpp
 )
 
 target_link_libraries(HTFD_UnitTests
