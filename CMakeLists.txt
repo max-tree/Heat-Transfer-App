@@ -27,6 +27,7 @@ add_library(heatTransfer STATIC
 add_executable(HTFD_UnitTests
 GetNodeEquation_UnitTest.cpp
 IdentifyHeatTransferNodeCase_UnitTest.cpp
+CalculateDistanceBetweenTwoNodes_UnitTest.cpp
 )
 
 target_link_libraries(HTFD_UnitTests

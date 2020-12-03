@@ -11,6 +11,8 @@
 //-------------------------------------------------------
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "HeatTransferWorld.h"
+#include "HeatTransferNode.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,7 +35,7 @@ void MainWindow::setup()
 {
     QString filename = read_in_filename();
 
-    if(filename.isEmpty())
+    if(filename.isEmpty())//add pop up window to notify the user of the error and let them know to restart the program.
         return;
 
     vtkNew<vtkExodusIIReader> reader;
@@ -85,12 +87,10 @@ void MainWindow::create_mapper(vtkCompositeDataGeometryFilter* geometry)
 
 void MainWindow::iterate(vtkExodusIIReader* reader)
 {
-    int numOfIterations{0};
     vtkSmartPointer<vtkCompositeDataSet> input = reader->GetOutput();
     vtkCompositeDataIterator* iter = input->NewIterator();
     for (iter->InitTraversal(); !iter->IsDoneWithTraversal(); iter->GoToNextItem())
       {
-        numOfIterations++;
         vtkUnstructuredGrid* unstructuredGrid = vtkUnstructuredGrid::SafeDownCast(iter->GetCurrentDataObject());
         if(unstructuredGrid)
         {
@@ -128,7 +128,8 @@ double calculate_distance_from_the_origin(double pt[3])
 {
     QVector3D vec(pt[0],pt[1],pt[2]);
     double length = vec.length();
-    return length/5.0;//Color is controled by the length from the origin. May need to create a new "setLookupTable()"
+    std::cout << '\n' << length << '\n';
+    return length;//Color is controled by the length from the origin. May need to create a new "setLookupTable()"
 }
 
 void configure_reader(vtkExodusIIReader* reader, QString filename)
@@ -142,6 +143,7 @@ void configure_reader(vtkExodusIIReader* reader, QString filename)
 
 void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
 {
+    HeatTransferWorld HTW;
     vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
     vtkIdType number_points= points->GetNumberOfPoints();
     //create a for loop here that goes through all the data points like in the for loop below. Instead of giving the data
@@ -150,10 +152,16 @@ void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data
     for(vtkIdType index=0;index<number_points;index++)
     {
         double pt[3];
+        HeatTransferNode* node = new HeatTransferNode;
+        node->nodeIdNum = index;
         points->GetPoint(index,pt);
+
+        set_x_and_y_coordinates(node, pt[0], pt[1]);
 
         double length = calculate_distance_from_the_origin(pt);
         data->InsertNextValue(length);
+
+        //HTW.nodeStorage.push_back(node);//when the vector ceases to exist it will delete the nodes inside automatically right?
     }
 }
 

@@ -1,5 +1,8 @@
 #ifndef HEATTRANSFERWORLD_H
 #define HEATTRANSFERWORLD_H
+
+#include "HeatTransferNode.h"
+#include <vector>
 #include <iostream>
 #include <array>
 
@@ -29,6 +32,7 @@ public:
     HeatTransferWorld(){}
     ~HeatTransferWorld(){}
     std::array <double,6> get_node_equation_coefficients();
+    std::vector <HeatTransferNode*> nodeStorage;
     void get_node_equation(int nodeCaseIdNum);
     void set_convection_coefficient(double hNew);
     double get_convection_coefficient();
@@ -38,6 +42,7 @@ public:
     void set_thermal_conductivity(double kNew);
     double get_free_stream_temperature();
     void set_free_stream_temperature(double freeStreamTempNew);
+    void set_deltaX_and_deltaY(double newDeltaX);
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
