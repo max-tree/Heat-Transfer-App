@@ -12,6 +12,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include <QVTKOpenGlWidget.h>
+//Consider using QDebug to be able to debug stuff like normal.
 
 int main(int argc, char *argv[])
 {

@@ -147,22 +147,25 @@ void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data
     vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
     vtkIdType number_points= points->GetNumberOfPoints();
     //create a for loop here that goes through all the data points like in the for loop below. Instead of giving the data
-    //a value, fill in a class with node info. Get lengths between nodes, identify node types, derivev equations/store
+    //a value, fill in a class with node info. Get lengths between nodes, identify node types, derive equations/store
     //all of the equations in a matrix, perform matrix math, then do the for loop below to fill in the data.
     for(vtkIdType index=0;index<number_points;index++)
     {
-        double pt[3];
-        HeatTransferNode* node = new HeatTransferNode;
-        node->nodeIdNum = index;
-        points->GetPoint(index,pt);
+//        double pt[3];
+//        HeatTransferNode* newNode = new HeatTransferNode;
+//        newNode->nodeIdNum = index;
+//        points->GetPoint(index,pt);
 
-        set_x_and_y_coordinates(node, pt[0], pt[1]);
+//        set_x_and_y_coordinates(newNode, pt[0], pt[1]);
 
-        double length = calculate_distance_from_the_origin(pt);
-        data->InsertNextValue(length);
+//        double length = calculate_distance_from_the_origin(pt);
+//        data->InsertNextValue(length); //0 is red, 1 is blue, 0.5 is green.
 
-        //HTW.nodeStorage.push_back(node);//when the vector ceases to exist it will delete the nodes inside automatically right?
+//        HTW.nodeStorage.push_back(newNode);//Still need to delete the stuff I use new.
     }
+    //calculate deltaX
+//    calculate_distance_between_two_nodes(HTW.nodeStorage(0),HTW.nodeStorage(1));
+
 }
 
 void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)

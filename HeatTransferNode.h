@@ -28,6 +28,6 @@ struct HeatTransferNode
 
 void identify_heat_transfer_node_case_id(HeatTransferNode* node);//might need the & to save changes.
 void set_x_and_y_coordinates(HeatTransferNode* node, double xCoordinate, double yCoordinate);
-double calculate_distance_between_two_nodes(HeatTransferNode node1, HeatTransferNode node2);
+double calculate_distance_between_two_nodes(HeatTransferNode* node1, HeatTransferNode* node2);
 
 #endif // NODEINFO_H
