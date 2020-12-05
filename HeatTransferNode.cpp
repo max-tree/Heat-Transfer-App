@@ -150,6 +150,22 @@ bool has_an_adiabat_on_the_right_and_convection_on_the_top(HeatTransferNode* nod
     }
 }
 
+bool has_a_plane_surface_with_convection_on_the_top(HeatTransferNode* node)
+{
+    if(node->conditionAboveNode == CONVECTION &&
+            node->conditionBelowNode == NEIGHBOR_NODE &&
+            node->conditionToTheRightOfTheNode == NEIGHBOR_NODE &&
+            node->conditionToTheLeftOfTheNode == NEIGHBOR_NODE)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 void identify_heat_transfer_node_case_id(HeatTransferNode* node)
 {
     if(node->specialConditionInternalCornerBottomRight != NOT_INITIALIZED)
@@ -157,6 +173,9 @@ void identify_heat_transfer_node_case_id(HeatTransferNode* node)
 
     else if(is_an_interior_node(node))
         node->nodeCaseIdNum = CASE_INTERIOR_NODE;
+
+    else if(has_a_plane_surface_with_convection_on_the_top(node))
+        node->nodeCaseIdNum = CASE_PLANE_SURFACE_WITH_CONVECTION_ON_TOP;
 
     else if (has_an_adiabatic_plane_surface_on_the_left(node))
         node->nodeCaseIdNum = CASE_ADIABATIC_PLANE_SURFACE_ON_THE_LEFT;

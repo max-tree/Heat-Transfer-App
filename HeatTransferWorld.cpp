@@ -44,108 +44,71 @@ void HeatTransferWorld::set_free_stream_temperature(double freeStreamTempNew)
     freeStreamTemp = freeStreamTempNew;
 }
 
+void HeatTransferWorld::set_coefficients(std::array <double,6> coefficients)
+{
+    nodeEquationCoefficients[NODE_INNER] = coefficients[0];
+    nodeEquationCoefficients[NODE_ABOVE] = coefficients[1];
+    nodeEquationCoefficients[NODE_BELOW] = coefficients[2];
+    nodeEquationCoefficients[NODE_TO_THE_LEFT] = coefficients[3];
+    nodeEquationCoefficients[NODE_TO_THE_RIGHT] = coefficients[4];
+    nodeEquationCoefficients[NODE_CONVECTION] = coefficients[5];
+}
+
 void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
 {
+    std::array <double,6> coefficients{0.0,0.0,0.0,0.0,0.0,0.0};
     switch (nodeCaseIdNum)
     {
     case CASE_INTERIOR_NODE:
-        nodeEquationCoefficients[NODE_INNER] = -4.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 1.0;
-        nodeEquationCoefficients[NODE_BELOW] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = 0.0;
+        coefficients = {-4.0,1.0,1.0,1.0,1.0,0.0};
+        set_coefficients(coefficients);
         break;
     case CASE_PLANE_SURFACE_WITH_CONVECTION_ON_TOP:
-        nodeEquationCoefficients[NODE_INNER] = -(2*h*deltaX)/k - 4.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 0.0;
-        nodeEquationCoefficients[NODE_BELOW] = 2.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -(2.0*h*deltaX*freeStreamTemp)/k;
+        coefficients = {-(2*h*deltaX)/k - 4.0,0.0,2.0,1.0,1.0,-(2.0*h*deltaX*freeStreamTemp)/k};
+        set_coefficients(coefficients);
         break;
     case CASE_PLANE_SURFACE_WITH_CONVECTION_ON_BOTTOM:
-        nodeEquationCoefficients[NODE_INNER] = -(2.0*h*deltaX)/k - 4.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 2.0;
-        nodeEquationCoefficients[NODE_BELOW] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -(2*h*deltaX*freeStreamTemp)/k;
+        coefficients = {-(2.0*h*deltaX)/k - 4.0,2.0,0.0,1.0,1.0,-(2*h*deltaX*freeStreamTemp)/k};
+        set_coefficients(coefficients);
         break;
     case CASE_INTERNAL_CORNER_WITH_CONVECTION_ON_BOTTOM_RIGHT:
-        nodeEquationCoefficients[NODE_INNER] = -(2.0*h*deltaX)/k - 6.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 2.0;
-        nodeEquationCoefficients[NODE_BELOW] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 2.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -(2*h*deltaX*freeStreamTemp)/k;
+        coefficients = {-(2.0*h*deltaX)/k - 6.0,2.0,1.0,2.0,1.0,-(2*h*deltaX*freeStreamTemp)/k};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABATIC_PLANE_SURFACE_ON_THE_RIGHT:
-        nodeEquationCoefficients[NODE_INNER] = -4.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 1.0;
-        nodeEquationCoefficients[NODE_BELOW] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 2.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 0.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = 0.0;
+        coefficients = {-4.0,1.0,1.0,2.0,0.0,0.0};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABATIC_PLANE_SURFACE_ON_THE_LEFT:
-        nodeEquationCoefficients[NODE_INNER] = -4.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 1.0;
-        nodeEquationCoefficients[NODE_BELOW] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 2.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = 0.0;
+        coefficients = {-4.0,1.0,1.0,0.0,2.0,0.0};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABATIC_PLANE_SURFACE_ON_THE_BOTTOM:
-        nodeEquationCoefficients[NODE_INNER] = -4.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 2.0;
-        nodeEquationCoefficients[NODE_BELOW] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = 0.0;
+        coefficients = {-4.0,2.0,0.0,1.0,1.0,0.0};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_LEFT_AND_BOTTOM:
-        nodeEquationCoefficients[NODE_INNER] = -2.0;
-        nodeEquationCoefficients[NODE_ABOVE] = 1.0;
-        nodeEquationCoefficients[NODE_BELOW] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = 0.0;
+        coefficients = {-2.0,1.0,0.0,0.0,1.0,0.0};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_BOTTOM_AND_CONVECTION_ON_RIGHT:
-        nodeEquationCoefficients[NODE_INNER] = -2.0-h*deltaX/k;
-        nodeEquationCoefficients[NODE_ABOVE] = 1.0;
-        nodeEquationCoefficients[NODE_BELOW] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 0.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -h*deltaX*freeStreamTemp/k;
+        coefficients = {-2.0-h*deltaX/k,1.0,0.0,1.0,0.0,-h*deltaX*freeStreamTemp/k};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_RIGHT_AND_CONVECTION_ON_BOTTOM:
-        nodeEquationCoefficients[NODE_INNER] = -2.0-h*deltaX/k;
-        nodeEquationCoefficients[NODE_ABOVE] = 1.0;
-        nodeEquationCoefficients[NODE_BELOW] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 0.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -h*deltaX*freeStreamTemp/k;
+        coefficients = {-2.0-h*deltaX/k,1.0,0.0,1.0,0.0,-h*deltaX*freeStreamTemp/k};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_RIGHT_AND_CONVECTION_ON_TOP:
-        nodeEquationCoefficients[NODE_INNER] = -2.0-h*deltaX/k;
-        nodeEquationCoefficients[NODE_ABOVE] = 0.0;
-        nodeEquationCoefficients[NODE_BELOW] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 0.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -h*deltaX*freeStreamTemp/k;
+        coefficients = {-2.0-h*deltaX/k,0.0,1.0,1.0,0.0,-h*deltaX*freeStreamTemp/k};
+        set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_LEFT_AND_CONVECTION_ON_TOP:
-        nodeEquationCoefficients[NODE_INNER] = -2.0-h*deltaX/k;
-        nodeEquationCoefficients[NODE_ABOVE] = 0.0;
-        nodeEquationCoefficients[NODE_BELOW] = 1.0;
-        nodeEquationCoefficients[NODE_TO_THE_LEFT] = 0.0;
-        nodeEquationCoefficients[NODE_TO_THE_RIGHT] = 1.0;
-        nodeEquationCoefficients[NODE_CONVECTION] = -h*deltaX*freeStreamTemp/k;
+        coefficients = {-2.0-h*deltaX/k,0.0,1.0,0.0,1.0,-h*deltaX*freeStreamTemp/k};
+        set_coefficients(coefficients);
         break;
     default:
-        std::cout << '\n' << "ERROR" << '\n';
+        return;
     }
 }
 

@@ -1,7 +1,6 @@
 #ifndef HEATTRANSFERWORLD_H
 #define HEATTRANSFERWORLD_H
 
-#include "HeatTransferNode.h"
 #include <vector>
 #include <iostream>
 #include <array>
@@ -26,6 +25,8 @@
 #define CASE_ADIABAT_ON_RIGHT_AND_CONVECTION_ON_TOP 10
 #define CASE_ADIABAT_ON_LEFT_AND_CONVECTION_ON_TOP 11
 
+struct HeatTransferNode;
+
 class HeatTransferWorld
 {
 public:
@@ -43,6 +44,7 @@ public:
     double get_free_stream_temperature();
     void set_free_stream_temperature(double freeStreamTempNew);
     void set_deltaX_and_deltaY(double newDeltaX);
+    void HeatTransferWorld::set_coefficients(std::array <double,6> coefficients);
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
