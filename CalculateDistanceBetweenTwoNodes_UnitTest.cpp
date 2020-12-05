@@ -1,6 +1,5 @@
 #include "HeatTransferNode.h"
 #include "gtest/gtest.h"
-#include "math.h"
 
 TEST(CalculateDistanceBetweenTwoNodes, WhenNodesAreIdentical_ExpectDistanceOfZero)
 {

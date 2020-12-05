@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <array>
+#include "math.h"
 
 #define NODE_ABOVE 0
 #define NODE_TO_THE_LEFT 1
@@ -45,6 +46,7 @@ public:
     void set_free_stream_temperature(double freeStreamTempNew);
     void set_deltaX_and_deltaY(double newDeltaX);
     void HeatTransferWorld::set_coefficients(std::array <double,6> coefficients);
+    void identify_neighbor_nodes(int nodeIndex, int numberOfNodes);
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
@@ -54,5 +56,8 @@ private:
     double k{0.0};
     double freeStreamTemp{0.0};
 };
+
+void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes);
+void create_new_heat_transfer_nodes(HeatTransferWorld HTW, int numberOfNodes);
 
 #endif // HEATTRANSFERWORLD_H

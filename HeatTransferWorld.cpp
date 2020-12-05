@@ -118,4 +118,11 @@ void HeatTransferWorld::set_deltaX_and_deltaY(double newDeltaX)
     deltaY = deltaX;
 }
 
+void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
+{
+    for(int index=0;index<numberOfNodes;index++)
+    {
+        delete HTW.nodeStorage[index];
+    }
+}
 
