@@ -22,6 +22,7 @@ add_library(heatTransfer STATIC
     HeatTransferWorld.cpp
     HeatTransferNode.h
     HeatTransferNode.cpp
+    HeatTransferWorldAccessPrivateDataFunctions.cpp
 )
 
 add_executable(HTFD_UnitTests

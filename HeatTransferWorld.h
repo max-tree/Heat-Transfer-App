@@ -58,6 +58,11 @@ private:
 };
 
 void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes);
-void create_new_heat_transfer_nodes(HeatTransferWorld HTW, int numberOfNodes);
+void create_new_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes);
+
+bool is_a_neighbor_on_top(HeatTransferNode* node1, HeatTransferNode* node2);
+bool is_a_neighbor_on_bottom(HeatTransferNode* node1, HeatTransferNode* node2);
+bool is_a_neighbor_on_the_right(HeatTransferNode* node1, HeatTransferNode* node2);
+bool is_a_neighbor_on_the_left(HeatTransferNode* node1, HeatTransferNode* node2);
 
 #endif // HEATTRANSFERWORLD_H

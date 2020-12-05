@@ -1,58 +1,5 @@
 #include "HeatTransferWorld.h"
-
-std::array <double,6> HeatTransferWorld::get_node_equation_coefficients()
-{
-    return nodeEquationCoefficients;
-}
-
-void HeatTransferWorld::set_convection_coefficient(double hNew)
-{
-    h = hNew;
-}
-
-double HeatTransferWorld::get_convection_coefficient()
-{
-    return h;
-}
-
-double HeatTransferWorld::get_deltaX()
-{
-    return deltaX;
-}
-
-double HeatTransferWorld::get_deltaY()
-{
-    return deltaY;
-}
-
-double HeatTransferWorld::get_thermal_conductivity()
-{
-    return k;
-}
-void HeatTransferWorld::set_thermal_conductivity(double kNew)
-{
-    k = kNew;
-}
-
-double HeatTransferWorld::get_free_stream_temperature()
-{
-    return freeStreamTemp;
-}
-
-void HeatTransferWorld::set_free_stream_temperature(double freeStreamTempNew)
-{
-    freeStreamTemp = freeStreamTempNew;
-}
-
-void HeatTransferWorld::set_coefficients(std::array <double,6> coefficients)
-{
-    nodeEquationCoefficients[NODE_INNER] = coefficients[0];
-    nodeEquationCoefficients[NODE_ABOVE] = coefficients[1];
-    nodeEquationCoefficients[NODE_BELOW] = coefficients[2];
-    nodeEquationCoefficients[NODE_TO_THE_LEFT] = coefficients[3];
-    nodeEquationCoefficients[NODE_TO_THE_RIGHT] = coefficients[4];
-    nodeEquationCoefficients[NODE_CONVECTION] = coefficients[5];
-}
+#include "HeatTransferNode.h"
 
 void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
 {
@@ -112,12 +59,6 @@ void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
     }
 }
 
-void HeatTransferWorld::set_deltaX_and_deltaY(double newDeltaX)
-{
-    deltaX = newDeltaX;
-    deltaY = deltaX;
-}
-
 void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
 {
     for(int index=0;index<numberOfNodes;index++)
@@ -126,3 +67,76 @@ void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
     }
 }
 
+void create_new_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
+{
+    for(int index{0};index<numberOfNodes;index++)
+    {
+        HeatTransferNode* newNode = new HeatTransferNode;
+        newNode->nodeIdNum = index;
+        HTW.nodeStorage.push_back(newNode);
+    }
+}
+
+bool is_a_neighbor_on_top(HeatTransferNode* node1, HeatTransferNode* node2)
+{
+    if(node2->yCoordinate - node1->yCoordinate == 1)
+        return true;
+    else
+        return false;
+}
+
+bool is_a_neighbor_on_bottom(HeatTransferNode* node1, HeatTransferNode* node2)
+{
+    if(node1->yCoordinate - node2->yCoordinate == 1)
+        return true;
+    else
+        return false;
+}
+
+bool is_a_neighbor_on_the_right(HeatTransferNode* node1, HeatTransferNode* node2)
+{
+    if(node2->xCoordinate - node1->xCoordinate == 1)
+        return true;
+    else
+        return false;
+}
+
+bool is_a_neighbor_on_the_left(HeatTransferNode* node1, HeatTransferNode* node2)
+{
+    if(node1->xCoordinate - node2->xCoordinate == 1)
+        return true;
+    else
+        return false;
+}
+
+void HeatTransferWorld::identify_neighbor_nodes(int nodeIndex, int numberOfNodes)
+{
+    double placeholder{0.0};
+    if(nodeStorage.size() == 0)
+    {
+        for(int index=0;index<numberOfNodes;index++)
+        {
+            HeatTransferNode* falseNode = new HeatTransferNode;
+            nodeStorage.push_back(falseNode);
+        }
+        return;
+    }
+
+    for(int index{0};index<numberOfNodes;index++)
+    {
+       placeholder = calculate_distance_between_two_nodes(nodeStorage[nodeIndex],nodeStorage[index]);
+       if(placeholder == get_deltaX())
+       {
+           if(is_a_neighbor_on_top(nodeStorage[nodeIndex],nodeStorage[index]))
+               nodeStorage[nodeIndex]->conditionAboveNode = NEIGHBOR_NODE;
+           else if(is_a_neighbor_on_bottom(nodeStorage[nodeIndex],nodeStorage[index]))
+               nodeStorage[nodeIndex]->conditionBelowNode = NEIGHBOR_NODE;
+           else if(is_a_neighbor_on_the_right(nodeStorage[nodeIndex],nodeStorage[index]))
+               nodeStorage[nodeIndex]->conditionToTheRightOfTheNode = NEIGHBOR_NODE;
+           else if(is_a_neighbor_on_the_left(nodeStorage[nodeIndex],nodeStorage[index]))
+               nodeStorage[nodeIndex]->conditionToTheLeftOfTheNode = NEIGHBOR_NODE;
+           else{}
+       }
+       else{}
+    }
+}
