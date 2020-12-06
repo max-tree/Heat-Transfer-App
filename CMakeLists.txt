@@ -35,7 +35,6 @@ IdentifyNeighborNodes_UnitTest.cpp
 target_link_libraries(HTFD_UnitTests
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
-    Qt5::Widgets
     heatTransfer
 )
 
@@ -44,6 +43,8 @@ SET(MYSOURCE
     MainWindow.cpp
     MainWindow.h
     MainWindow.ui
+    qhoversensitivebutton.h
+    qhoversensitivebutton.cpp
     )
 add_executable(${PROJECT_NAME} WIN32
     ${MYSOURCE}

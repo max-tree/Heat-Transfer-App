@@ -42,6 +42,7 @@ public:
     double get_deltaX();
     double get_deltaY();
     double get_thermal_conductivity();
+    int numberOfNodes{0};
     void set_thermal_conductivity(double kNew);
     double get_free_stream_temperature();
     void set_free_stream_temperature(double freeStreamTempNew);

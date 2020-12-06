@@ -52,6 +52,9 @@
 #include "HeatTransferWorld.h"
 #include "HeatTransferNode.h"
 
+#include <QPushButton>
+#include "qhoversensitivebutton.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -64,6 +67,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     HeatTransferWorld HTW;
+    QPushButton *newphysicalbutton = new QPushButton("&HELLO",this);
+
+    QHoverSensitiveButton *newsensitivebutton = new QHoverSensitiveButton(newphysicalbutton);
     void add_window_to_rendering();
     void create_actor(vtkPolyDataMapper* actor);
     void create_geometry(vtkExodusIIReader* reader);
