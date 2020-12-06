@@ -49,6 +49,9 @@
 #include <vtkMultiBlockDataSet.h>
 #include <vtkCompositeDataIterator.h>
 
+#include "HeatTransferWorld.h"
+#include "HeatTransferNode.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -60,6 +63,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    HeatTransferWorld HTW;
     void add_window_to_rendering();
     void create_actor(vtkPolyDataMapper* actor);
     void create_geometry(vtkExodusIIReader* reader);
@@ -69,6 +73,7 @@ public:
     QString read_in_filename();
     void render_this_instance();
     void set_background_render(std::array <double,3> color);
+    void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data);
 
 protected slots:
     void setup();
@@ -81,7 +86,6 @@ private:
 };
 
 void configure_reader(vtkExodusIIReader* reader, QString filename);
-void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data);
 void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data);
 double calculate_distance_from_the_origin(double pt[3]);
 

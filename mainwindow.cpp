@@ -11,9 +11,8 @@
 //-------------------------------------------------------
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "HeatTransferWorld.h"
-#include "HeatTransferNode.h"
 #include <QDebug>
+#include <QPushButton>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -36,7 +35,7 @@ void MainWindow::setup()
 {
     QString filename = read_in_filename();
 
-    if(filename.isEmpty())//add pop up window to notify the user of the error and let them know to restart the program.
+    if(filename.isEmpty())
         return;
 
     vtkNew<vtkExodusIIReader> reader;
@@ -142,9 +141,8 @@ void configure_reader(vtkExodusIIReader* reader, QString filename)
     reader->Update();
 }
 
-void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
+void MainWindow::fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
 {
-    HeatTransferWorld HTW;
     vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
     vtkIdType numberOfPoints= points->GetNumberOfPoints();
     //create a for loop here that goes through all the data points like in the for loop below. Instead of giving the data

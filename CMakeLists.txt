@@ -35,6 +35,7 @@ IdentifyNeighborNodes_UnitTest.cpp
 target_link_libraries(HTFD_UnitTests
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
+    Qt5::Widgets
     heatTransfer
 )
 

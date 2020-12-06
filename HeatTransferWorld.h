@@ -30,6 +30,7 @@ struct HeatTransferNode;
 
 class HeatTransferWorld
 {
+
 public:
     HeatTransferWorld(){}
     ~HeatTransferWorld(){}
@@ -45,7 +46,7 @@ public:
     double get_free_stream_temperature();
     void set_free_stream_temperature(double freeStreamTempNew);
     void set_deltaX_and_deltaY(double newDeltaX);
-    void HeatTransferWorld::set_coefficients(std::array <double,6> coefficients);
+    void set_coefficients(std::array <double,6> coefficients);
     void identify_neighbor_nodes(int nodeIndex, int numberOfNodes);
 
 private:
