@@ -1,8 +1,6 @@
 #include "MouseInteractorStylePP.h"
 #include <QDebug>
 
-void debugMouseClickEvent(double picked[3]);
-
 void MouseInteractorStylePP::OnLeftButtonDown()
 {
   this->Interactor->GetPicker()->Pick(this->Interactor->GetEventPosition()[0],

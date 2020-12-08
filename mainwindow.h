@@ -74,6 +74,7 @@ public:
     void render_this_instance();
     void set_background_render(std::array <double,3> color);
     void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data);
+    void create_mouse_interactor();
 
 protected slots:
     void setup();

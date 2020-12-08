@@ -27,9 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     create_layout();
     add_window_to_rendering(); 
     setup();
-
     set_background_render(lightGrey);
-
 }
 
 MainWindow::~MainWindow()
@@ -48,6 +46,7 @@ void MainWindow::setup()
     configure_reader(reader, filename);
     iterate(reader);
     create_geometry(reader);
+    create_mouse_interactor();
     render_this_instance();
 }
 
@@ -120,31 +119,34 @@ QString MainWindow::read_in_filename()
    return filename;
 }
 
-void MainWindow::render_this_instance()
+void MainWindow::create_mouse_interactor()
 {
     vtkSmartPointer<vtkPointPicker> pointPicker =
-vtkSmartPointer<vtkPointPicker>::New();
+            vtkSmartPointer<vtkPointPicker>::New();
 
-// Create a renderer, render window, and interactor
-vtkSmartPointer<vtkRenderWindow> renderWindow =
-vtkSmartPointer<vtkRenderWindow>::New();
-renderWindow->AddRenderer(mRenderer);
-vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
-vtkSmartPointer<vtkRenderWindowInteractor>::New();
-renderWindowInteractor->SetPicker(pointPicker);
-renderWindowInteractor->SetRenderWindow(renderWindow);
+    vtkSmartPointer<vtkRenderWindow> renderWindow =
+            vtkSmartPointer<vtkRenderWindow>::New();
+    renderWindow->AddRenderer(mRenderer);
 
-vtkSmartPointer<MouseInteractorStylePP> style =
-vtkSmartPointer<MouseInteractorStylePP>::New();
-renderWindowInteractor->SetInteractorStyle( style );
+    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
+            vtkSmartPointer<vtkRenderWindowInteractor>::New();
+    renderWindowInteractor->SetPicker(pointPicker);
+    renderWindowInteractor->SetRenderWindow(renderWindow);
 
-renderWindowInteractor->Start();
+    vtkSmartPointer<MouseInteractorStylePP> style =
+            vtkSmartPointer<MouseInteractorStylePP>::New();
+    renderWindowInteractor->SetInteractorStyle( style );
+
+    renderWindowInteractor->Start();
+}
+
+void MainWindow::render_this_instance()
+{
     this->mQVtkWidget->GetRenderWindow()->Render();
 }
 
 void MainWindow::set_background_render(std::array <double,3> color)
 {
-//    mRenderer->GradientBackgroundOn();
     mRenderer->SetBackground(color[0],color[1],color[2]);
 }
 

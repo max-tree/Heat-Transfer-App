@@ -23,4 +23,6 @@ public:
   virtual void OnLeftButtonDown() override;
 };
 
+void debugMouseClickEvent(double picked[3]);
+
 #endif // MOUSEINTERACTORSTYLEPP_H
