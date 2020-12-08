@@ -13,6 +13,10 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QPushButton>
+#include "MouseInteractorStylePP.h"
+
+
+vtkStandardNewMacro(MouseInteractorStylePP);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,7 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
     create_layout();
     add_window_to_rendering(); 
     setup();
+
     set_background_render(lightGrey);
+
 }
 
 MainWindow::~MainWindow()
@@ -67,6 +73,7 @@ void MainWindow::create_geometry(vtkExodusIIReader* reader)
     vtkNew<vtkCompositeDataGeometryFilter> geometry;
     geometry->SetInputConnection(reader->GetOutputPort());
     create_mapper(geometry);
+
 }
 
 void MainWindow::create_layout()
@@ -115,6 +122,23 @@ QString MainWindow::read_in_filename()
 
 void MainWindow::render_this_instance()
 {
+    vtkSmartPointer<vtkPointPicker> pointPicker =
+vtkSmartPointer<vtkPointPicker>::New();
+
+// Create a renderer, render window, and interactor
+vtkSmartPointer<vtkRenderWindow> renderWindow =
+vtkSmartPointer<vtkRenderWindow>::New();
+renderWindow->AddRenderer(mRenderer);
+vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor =
+vtkSmartPointer<vtkRenderWindowInteractor>::New();
+renderWindowInteractor->SetPicker(pointPicker);
+renderWindowInteractor->SetRenderWindow(renderWindow);
+
+vtkSmartPointer<MouseInteractorStylePP> style =
+vtkSmartPointer<MouseInteractorStylePP>::New();
+renderWindowInteractor->SetInteractorStyle( style );
+
+renderWindowInteractor->Start();
     this->mQVtkWidget->GetRenderWindow()->Render();
 }
 

@@ -5,6 +5,7 @@ FIND_PACKAGE(Qt5Widgets)
 FIND_PACKAGE(QT5GUI)
 FIND_PACKAGE(QT5OpenGL)
 FIND_PACKAGE(VTK REQUIRED)
+
 FIND_PACKAGE(GTest REQUIRED)
 
 include(${VTK_USE_FILE})
@@ -44,6 +45,7 @@ SET(MYSOURCE
     MainWindow.cpp
     MainWindow.h
     MainWindow.ui
+    MouseInteractorStylePP.h
     )
 add_executable(${PROJECT_NAME} WIN32
     ${MYSOURCE}
