@@ -190,11 +190,6 @@ void MainWindow::fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubl
         HTW.nodeStorage.push_back(newNode);
     }
     HTW.set_deltaX_and_deltaY(calculate_distance_between_two_nodes(HTW.nodeStorage[0],HTW.nodeStorage[1]));
-
-    for(vtkIdType index=0;index<numberOfPoints;index++)
-    {
-        delete HTW.nodeStorage[index];
-    }
 }
 
 void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)

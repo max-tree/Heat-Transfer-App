@@ -1,6 +1,14 @@
 #include "HeatTransferWorld.h"
 #include "HeatTransferNode.h"
 
+HeatTransferWorld::~HeatTransferWorld()
+{
+    for(int index=0;index<numberOfNodes;index++)
+    {
+        delete nodeStorage[index];
+    }
+}
+
 void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
 {
     std::array <double,6> coefficients{0.0,0.0,0.0,0.0,0.0,0.0};
@@ -56,14 +64,6 @@ void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
         break;
     default:
         return;
-    }
-}
-
-void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
-{
-    for(int index=0;index<numberOfNodes;index++)
-    {
-        delete HTW.nodeStorage[index];
     }
 }
 

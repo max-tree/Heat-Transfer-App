@@ -33,7 +33,7 @@ class HeatTransferWorld
 
 public:
     HeatTransferWorld(){}
-    ~HeatTransferWorld(){}
+    ~HeatTransferWorld();
     std::array <double,6> get_node_equation_coefficients();
     std::vector <HeatTransferNode*> nodeStorage;
     void get_node_equation(int nodeCaseIdNum);

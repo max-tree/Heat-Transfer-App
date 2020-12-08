@@ -37,8 +37,6 @@ TEST(IdentifyNeighborNodes, WhenNodeStorageVectorHasASizeOfZero_ExpectFalseNodeT
     HTW.identify_neighbor_nodes(nodeIndex, numberOfNodes);
 
     test_neighbor_results(HTW, expectedResult);
-
-    delete_all_heat_transfer_nodes(HTW,numberOfNodes);
 }
 
 
@@ -60,8 +58,6 @@ TEST(IdentifyNeighborNodes, WhenNodeHasOneNeighborOnTheLeft_ExpectCorrectNeighbo
     HTW.identify_neighbor_nodes(nodeIndex, numberOfNodes);
 
     test_neighbor_results(HTW, expectedResult);
-
-    delete_all_heat_transfer_nodes(HTW,numberOfNodes);
 }
 
 TEST(IdentifyNeighborNodes, WhenNodeHasThreeNeighbors_ExpectThreeCorrectNeighbors)
@@ -81,6 +77,4 @@ TEST(IdentifyNeighborNodes, WhenNodeHasThreeNeighbors_ExpectThreeCorrectNeighbor
     HTW.identify_neighbor_nodes(nodeIndex, numberOfNodes);
 
     test_neighbor_results(HTW, expectedResult);
-
-    delete_all_heat_transfer_nodes(HTW,numberOfNodes);
 }
