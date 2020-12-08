@@ -31,7 +31,9 @@ public:
     void calculate_nearest_node();
 
     double coordinateClicked[3]{0.0,0.0,0.0};
-    HeatTransferWorld HTWCalculated;
+    std::vector <double> nodeXStorage;
+    std::vector <double> nodeYStorage;
+
 };
 
 void debugMouseClickEvent(double picked[3]);

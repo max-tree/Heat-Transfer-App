@@ -12,9 +12,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-//#include <QPushButton>
 
-vtkStandardNewMacro(MouseInteractorStylePP); //This is where the PickPoint Class is created but I cannot get it to communicate with mainwindow.
+vtkStandardNewMacro(MouseInteractorStylePP);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,16 +22,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     mQVtkWidget= new QVTKOpenGLWidget(this);
     create_layout();
-    add_window_to_rendering(); 
+    add_window_to_rendering();
     setup();
     set_background_render(lightGrey);
+
 }
 
 
 MainWindow::~MainWindow()
 {
-//    delete MISPP;
     delete ui;
+    delete mQVtkWidget;
 }
 
 void MainWindow::setup()
@@ -47,7 +47,7 @@ void MainWindow::setup()
     iterate(reader);
     create_geometry(reader);
     create_mouse_interactor();
-    render_this_instance();
+//    render_this_instance();
 }
 
 void MainWindow::add_window_to_rendering()
@@ -133,9 +133,8 @@ void MainWindow::create_mouse_interactor()
     renderWindowInteractor->SetPicker(pointPicker);
     renderWindowInteractor->SetRenderWindow(renderWindow);
 
-    vtkSmartPointer<MouseInteractorStylePP> style =
-            vtkSmartPointer<MouseInteractorStylePP>::New();
     renderWindowInteractor->SetInteractorStyle( style );
+    transfer_heat_transfer_data_to_mouse_event_class();
 
     renderWindowInteractor->Start();
 }
@@ -182,6 +181,9 @@ void MainWindow::fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubl
 
         set_x_and_y_coordinates(newNode, pt[0], pt[1]);
 
+        HTW.nodeXCoordinates.push_back(pt[0]);
+        HTW.nodeYCoordinates.push_back(pt[1]);
+
         length = calculate_distance_from_the_origin(pt);
         data->InsertNextValue(length); //0 is red, 1 is blue, 0.5 is green.
 
@@ -189,7 +191,6 @@ void MainWindow::fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubl
     }
     HTW.set_deltaX_and_deltaY(calculate_distance_between_two_nodes(HTW.nodeStorage[0],HTW.nodeStorage[1]));
 
-//    transfer_heat_transfer_data_to_mouse_event_class();
     for(vtkIdType index=0;index<numberOfPoints;index++)
     {
         delete HTW.nodeStorage[index];
@@ -201,7 +202,9 @@ void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoub
     unstructuredGrid->GetPointData()->SetScalars(data);
 }
 
-//void MainWindow::transfer_heat_transfer_data_to_mouse_event_class()
-//{
-////    MISPP->HTWCalculated = HTW;
-//}
+void MainWindow::transfer_heat_transfer_data_to_mouse_event_class()
+{
+    style->nodeXStorage = HTW.nodeXCoordinates;
+    style->nodeYStorage = HTW.nodeYCoordinates;
+
+}

@@ -51,6 +51,8 @@ public:
     void set_coefficients(std::array <double,6> coefficients);
     void identify_neighbor_nodes(int nodeIndex, int numberOfNodes);
     double numberOfNodes{0.0};
+    std::vector <double> nodeXCoordinates;
+    std::vector <double> nodeYCoordinates;
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
