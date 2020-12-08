@@ -52,9 +52,12 @@
 #include "HeatTransferWorld.h"
 #include "HeatTransferNode.h"
 
+#include "MouseInteractorStylePP.h"
+
 namespace Ui {
 class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
@@ -64,6 +67,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     HeatTransferWorld HTW;
+//    MouseInteractorStylePP* MISPP = new MouseInteractorStylePP;  //Failed attempt to make a pointer to the callback...
+
     void add_window_to_rendering();
     void create_actor(vtkPolyDataMapper* actor);
     void create_geometry(vtkExodusIIReader* reader);
@@ -75,6 +80,7 @@ public:
     void set_background_render(std::array <double,3> color);
     void fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data);
     void create_mouse_interactor();
+//    void transfer_heat_transfer_data_to_mouse_event_class(); //Failed attempt at transferring the data from mainwindow to the PointPicker class...
 
 protected slots:
     void setup();

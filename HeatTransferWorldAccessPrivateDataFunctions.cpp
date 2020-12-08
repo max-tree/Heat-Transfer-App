@@ -6,14 +6,24 @@ std::array <double,6> HeatTransferWorld::get_node_equation_coefficients()
     return nodeEquationCoefficients;
 }
 
-void HeatTransferWorld::set_convection_coefficient(double hNew)
+void HeatTransferWorld::set_bottom_convection_coefficient(double hNew)
 {
-    h = hNew;
+    hBottom = hNew;
 }
 
-double HeatTransferWorld::get_convection_coefficient()
+void HeatTransferWorld::set_top_convection_coefficient(double hNew)
 {
-    return h;
+    hTop = hNew;
+}
+
+double HeatTransferWorld::get_top_convection_coefficient()
+{
+    return hTop;
+}
+
+double HeatTransferWorld::get_bottom_convection_coefficient()
+{
+    return hBottom;
 }
 
 double HeatTransferWorld::get_deltaX()

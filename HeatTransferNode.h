@@ -10,7 +10,7 @@
 
 struct HeatTransferNode
 {
-    HeatTransferNode* node{nullptr};
+//    HeatTransferNode* node{nullptr};
 
     int nodeIdNum{NOT_INITIALIZED};
     int nodeCaseIdNum{NOT_INITIALIZED};

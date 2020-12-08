@@ -13,14 +13,25 @@
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkObjectFactory.h>
 
-// Define interaction style
+#include "HeatTransferWorld.h"
+#include "HeatTransferNode.h"
+
+#include <vector>
+#include "math.h"
+
 class MouseInteractorStylePP : public vtkInteractorStyleTrackballCamera
 {
 public:
-  static MouseInteractorStylePP* New();
-  vtkTypeMacro(MouseInteractorStylePP, vtkInteractorStyleTrackballCamera);
+    static MouseInteractorStylePP* New();
 
-  virtual void OnLeftButtonDown() override;
+    vtkTypeMacro(MouseInteractorStylePP, vtkInteractorStyleTrackballCamera);
+
+    virtual void OnLeftButtonDown() override;
+    void debugMouseClickEvent(double coordinateClicked[3]);
+    void calculate_nearest_node();
+
+    double coordinateClicked[3]{0.0,0.0,0.0};
+    HeatTransferWorld HTWCalculated;
 };
 
 void debugMouseClickEvent(double picked[3]);

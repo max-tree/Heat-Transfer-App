@@ -37,8 +37,10 @@ public:
     std::array <double,6> get_node_equation_coefficients();
     std::vector <HeatTransferNode*> nodeStorage;
     void get_node_equation(int nodeCaseIdNum);
-    void set_convection_coefficient(double hNew);
-    double get_convection_coefficient();
+    void set_top_convection_coefficient(double hNew);
+    void set_bottom_convection_coefficient(double hNew);
+    double get_top_convection_coefficient();
+    double get_bottom_convection_coefficient();
     double get_deltaX();
     double get_deltaY();
     double get_thermal_conductivity();
@@ -48,13 +50,15 @@ public:
     void set_deltaX_and_deltaY(double newDeltaX);
     void set_coefficients(std::array <double,6> coefficients);
     void identify_neighbor_nodes(int nodeIndex, int numberOfNodes);
+    double numberOfNodes{0.0};
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
-    double h{0.0};
+    double hBottom{200.0};
+    double hTop{1000.0};
     double deltaX{1.0};
     double deltaY{deltaX};
-    double k{0.0};
+    double k{25.0};
     double freeStreamTemp{0.0};
 };
 

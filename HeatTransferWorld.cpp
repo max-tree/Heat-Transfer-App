@@ -11,15 +11,15 @@ void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
         set_coefficients(coefficients);
         break;
     case CASE_PLANE_SURFACE_WITH_CONVECTION_ON_TOP:
-        coefficients = {-(2*h*deltaX)/k - 4.0,0.0,2.0,1.0,1.0,-(2.0*h*deltaX*freeStreamTemp)/k};
+        coefficients = {-(2*hTop*deltaX)/k - 4.0,0.0,2.0,1.0,1.0,-(2.0*hTop*deltaX*freeStreamTemp)/k};
         set_coefficients(coefficients);
         break;
     case CASE_PLANE_SURFACE_WITH_CONVECTION_ON_BOTTOM:
-        coefficients = {-(2.0*h*deltaX)/k - 4.0,2.0,0.0,1.0,1.0,-(2*h*deltaX*freeStreamTemp)/k};
+        coefficients = {-(2.0*hBottom*deltaX)/k - 4.0,2.0,0.0,1.0,1.0,-(2*hBottom*deltaX*freeStreamTemp)/k};
         set_coefficients(coefficients);
         break;
     case CASE_INTERNAL_CORNER_WITH_CONVECTION_ON_BOTTOM_RIGHT:
-        coefficients = {-(2.0*h*deltaX)/k - 6.0,2.0,1.0,2.0,1.0,-(2*h*deltaX*freeStreamTemp)/k};
+        coefficients = {-(2.0*hBottom*deltaX)/k - 6.0,2.0,1.0,2.0,1.0,-(2*hBottom*deltaX*freeStreamTemp)/k};
         set_coefficients(coefficients);
         break;
     case CASE_ADIABATIC_PLANE_SURFACE_ON_THE_RIGHT:
@@ -39,19 +39,19 @@ void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
         set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_BOTTOM_AND_CONVECTION_ON_RIGHT:
-        coefficients = {-2.0-h*deltaX/k,1.0,0.0,1.0,0.0,-h*deltaX*freeStreamTemp/k};
+        coefficients = {-2.0-hBottom*deltaX/k,1.0,0.0,1.0,0.0,-hBottom*deltaX*freeStreamTemp/k};
         set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_RIGHT_AND_CONVECTION_ON_BOTTOM:
-        coefficients = {-2.0-h*deltaX/k,1.0,0.0,1.0,0.0,-h*deltaX*freeStreamTemp/k};
+        coefficients = {-2.0-hBottom*deltaX/k,1.0,0.0,1.0,0.0,-hBottom*deltaX*freeStreamTemp/k};
         set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_RIGHT_AND_CONVECTION_ON_TOP:
-        coefficients = {-2.0-h*deltaX/k,0.0,1.0,1.0,0.0,-h*deltaX*freeStreamTemp/k};
+        coefficients = {-2.0-hTop*deltaX/k,0.0,1.0,1.0,0.0,-hTop*deltaX*freeStreamTemp/k};
         set_coefficients(coefficients);
         break;
     case CASE_ADIABAT_ON_LEFT_AND_CONVECTION_ON_TOP:
-        coefficients = {-2.0-h*deltaX/k,0.0,1.0,0.0,1.0,-h*deltaX*freeStreamTemp/k};
+        coefficients = {-2.0-hTop*deltaX/k,0.0,1.0,0.0,1.0,-hTop*deltaX*freeStreamTemp/k};
         set_coefficients(coefficients);
         break;
     default:

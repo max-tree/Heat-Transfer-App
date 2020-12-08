@@ -15,7 +15,8 @@ void test_all_nodes(std::array <double,6> expectedResult, std::array <double,6> 
 
 void set_trivial_heat_transfer_values(HeatTransferWorld& HTW)
 {
-    HTW.set_convection_coefficient(1.0);
+    HTW.set_top_convection_coefficient(1.0);
+    HTW.set_bottom_convection_coefficient(1.0);
     HTW.set_thermal_conductivity(1.0);
     HTW.set_free_stream_temperature(1.0);
 }
