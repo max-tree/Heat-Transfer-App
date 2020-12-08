@@ -46,6 +46,7 @@ SET(MYSOURCE
     MainWindow.h
     MainWindow.ui
     MouseInteractorStylePP.h
+    MouseInteractorStylePP.cpp
     )
 add_executable(${PROJECT_NAME} WIN32
     ${MYSOURCE}
