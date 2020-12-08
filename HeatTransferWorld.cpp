@@ -67,15 +67,23 @@ void HeatTransferWorld::get_node_equation(int nodeCaseIdNum)
     }
 }
 
-void create_new_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
+void HeatTransferWorld::create_new_heat_transfer_nodes(int numberOfPoints, vtkSmartPointer<vtkPoints> points)
 {
-    for(int index{0};index<numberOfNodes;index++)
+    for(int index=0;index<numberOfPoints;index++)
     {
+        double pt[3];
         HeatTransferNode* newNode = new HeatTransferNode;
         newNode->nodeIdNum = index;
-        HTW.nodeStorage.push_back(newNode);
+        points->GetPoint(index,pt);
+
+        set_x_and_y_coordinates(newNode, pt[0], pt[1]);
+        nodeXCoordinates.push_back(pt[0]);
+        nodeYCoordinates.push_back(pt[1]);
+
+        nodeStorage.push_back(newNode);
     }
 }
+
 
 bool is_a_neighbor_on_top(HeatTransferNode* node1, HeatTransferNode* node2)
 {
@@ -138,5 +146,42 @@ void HeatTransferWorld::identify_neighbor_nodes(int nodeIndex, int numberOfNodes
            else{}
        }
        else{}
+    }
+}
+
+void HeatTransferWorld::identities_specific_to_the_turbine_blade_mesh(int index)
+{
+    if(nodeStorage[index]->conditionAboveNode !=1)
+    {
+        nodeStorage[index]->conditionAboveNode = CONVECTION;
+    }
+    if(nodeStorage[index]->conditionBelowNode != 1 && index <18)
+    {
+        nodeStorage[index]->conditionBelowNode = CONVECTION;
+    }
+    else
+    {
+        nodeStorage[index]->conditionBelowNode = ADIABAT;
+    }
+    if(nodeStorage[index]->conditionToTheLeftOfTheNode !=1)
+    {
+        nodeStorage[index]->conditionToTheLeftOfTheNode = ADIABAT;
+    }
+    if(nodeStorage[index]->conditionToTheRightOfTheNode != 1 && index != 20)
+    {
+        nodeStorage[index]->conditionToTheRightOfTheNode = ADIABAT;
+    }
+    else
+    {
+        nodeStorage[index]->conditionToTheRightOfTheNode = CONVECTION;
+    }
+}
+
+void HeatTransferWorld::identify_all_node_neighbors()
+{
+    for(int index{0};index<nodeStorage.size();index++)
+    {
+        identify_neighbor_nodes(index, nodeStorage.size());
+        identities_specific_to_the_turbine_blade_mesh(index);
     }
 }

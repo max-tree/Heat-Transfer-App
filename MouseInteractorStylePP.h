@@ -31,8 +31,8 @@ public:
     void calculate_nearest_node();
 
     double coordinateClicked[3]{0.0,0.0,0.0};
-    std::vector <double> nodeXStorage;
-    std::vector <double> nodeYStorage;
+    std::vector <double> nodeXCoodrinateStorage;
+    std::vector <double> nodeYCoordinateStorage;
 
 };
 

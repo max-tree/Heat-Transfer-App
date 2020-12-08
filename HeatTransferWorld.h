@@ -5,6 +5,8 @@
 #include <iostream>
 #include <array>
 #include "math.h"
+#include <vtkSmartPointer.h>
+#include <vtkPoints.h>
 
 #define NODE_ABOVE 0
 #define NODE_TO_THE_LEFT 1
@@ -53,6 +55,9 @@ public:
     double numberOfNodes{0.0};
     std::vector <double> nodeXCoordinates;
     std::vector <double> nodeYCoordinates;
+    void identify_all_node_neighbors();
+    void identities_specific_to_the_turbine_blade_mesh(int index);
+    void create_new_heat_transfer_nodes(int numberOfPoints, vtkSmartPointer<vtkPoints> points);
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};
@@ -65,7 +70,6 @@ private:
 };
 
 void delete_all_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes);
-void create_new_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes);
 
 bool is_a_neighbor_on_top(HeatTransferNode* node1, HeatTransferNode* node2);
 bool is_a_neighbor_on_bottom(HeatTransferNode* node1, HeatTransferNode* node2);

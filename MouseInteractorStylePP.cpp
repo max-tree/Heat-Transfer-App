@@ -5,14 +5,13 @@ void MouseInteractorStylePP::calculate_nearest_node()
 {
 
     std::vector <double> nodeDistanceFromClick;
-    int numberOfNodes = nodeXStorage.size();
+    int numberOfNodes = nodeXCoodrinateStorage.size();
     double distance{0.0};
 
     for(int index{0}; index < numberOfNodes;index++)
     {
-        distance = sqrt(pow(coordinateClicked[0]-nodeXStorage[index],2) + pow(coordinateClicked[1]-nodeYStorage[index],2));
+        distance = sqrt(pow(coordinateClicked[0]-nodeXCoodrinateStorage[index],2) + pow(coordinateClicked[1]-nodeYCoordinateStorage[index],2));
         nodeDistanceFromClick.push_back(distance);
-        qDebug() << nodeXStorage[index];
     }
     double distancePlaceholder{nodeDistanceFromClick[0]};
     int indexPlaceholder{0};

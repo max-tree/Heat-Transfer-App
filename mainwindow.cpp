@@ -149,15 +149,8 @@ void MainWindow::set_background_render(std::array <double,3> color)
     mRenderer->SetBackground(color[0],color[1],color[2]);
 }
 
-double calculate_distance_from_the_origin(double pt[3])
-{
-    QVector3D vec(pt[0],pt[1],pt[2]);
-    double length = vec.length();
-    return length;//Color is controled by the length from the origin. May need to create a new "setLookupTable()"
-}
-
 void configure_reader(vtkExodusIIReader* reader, QString filename)
-{
+{ 
     reader->SetFileName(filename.toStdString().c_str());
     reader->UpdateInformation();
     reader->SetTimeStep(0);
@@ -165,32 +158,48 @@ void configure_reader(vtkExodusIIReader* reader, QString filename)
     reader->Update();
 }
 
+int get_number_of_points(vtkIdType numberOfPoints)
+{
+    int numOfPts{0};
+    for(int index=0;index<numberOfPoints;index++)
+    {
+        numOfPts++;
+    }
+    return numOfPts;
+}
+
+void debugging_data_filler(vtkDoubleArray* &data, vtkIdType numberOfPoints)
+{
+    double debugFiller{0.5};
+    for(int index=0;index<numberOfPoints;index++)
+    {
+    data->InsertNextValue(debugFiller);
+    }
+}
+
+
 void MainWindow::fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
 {
     vtkSmartPointer<vtkPoints> points=unstructuredGrid->GetPoints();
     vtkIdType numberOfPoints= points->GetNumberOfPoints();
+    int numOfPts{get_number_of_points(numberOfPoints)};
 
-    double length{0.0};
+    debugging_data_filler(data, numberOfPoints);
 
-    for(vtkIdType index=0;index<numberOfPoints;index++)
-    {
-        double pt[3];
-        HeatTransferNode* newNode = new HeatTransferNode;
-        newNode->nodeIdNum = index;
-        points->GetPoint(index,pt);
+    HTW.create_new_heat_transfer_nodes(numOfPts, points);
 
-        set_x_and_y_coordinates(newNode, pt[0], pt[1]);
-
-        HTW.nodeXCoordinates.push_back(pt[0]);
-        HTW.nodeYCoordinates.push_back(pt[1]);
-
-        length = calculate_distance_from_the_origin(pt);
-        data->InsertNextValue(length); //0 is red, 1 is blue, 0.5 is green.
-
-        HTW.nodeStorage.push_back(newNode);
-    }
     HTW.set_deltaX_and_deltaY(calculate_distance_between_two_nodes(HTW.nodeStorage[0],HTW.nodeStorage[1]));
+
+    HTW.identify_all_node_neighbors();
+
+    qDebug()<< "Node neighbors of node zero are ";
+    qDebug()<< HTW.nodeStorage[20]->conditionAboveNode;
+    qDebug()<< HTW.nodeStorage[20]->conditionBelowNode;
+    qDebug()<< HTW.nodeStorage[20]->conditionToTheLeftOfTheNode;
+    qDebug()<< HTW.nodeStorage[20]->conditionToTheRightOfTheNode;
 }
+
+
 
 void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
 {
@@ -199,7 +208,7 @@ void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoub
 
 void MainWindow::transfer_heat_transfer_data_to_mouse_event_class()
 {
-    style->nodeXStorage = HTW.nodeXCoordinates;
-    style->nodeYStorage = HTW.nodeYCoordinates;
+    style->nodeXCoodrinateStorage = HTW.nodeXCoordinates;
+    style->nodeYCoordinateStorage = HTW.nodeYCoordinates;
 
 }

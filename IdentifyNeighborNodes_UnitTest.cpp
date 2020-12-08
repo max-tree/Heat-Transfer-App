@@ -11,6 +11,16 @@ void set_xCoordinate_of_each_node(HeatTransferWorld &HTW, std::array <double, 5>
     }
 }
 
+void create_new_heat_transfer_nodes(HeatTransferWorld &HTW, int numberOfNodes)
+{
+    for(int index{0};index<numberOfNodes;index++)
+    {
+        HeatTransferNode* newNode = new HeatTransferNode;
+        newNode->nodeIdNum = index;
+        HTW.nodeStorage.push_back(newNode);
+    }
+}
+
 void set_yCoordinate_of_each_node(HeatTransferWorld &HTW, std::array <double, 5> distancesBetweenNodes, int numberOfNodes)
 {
     for(int index{0};index<numberOfNodes;index++)

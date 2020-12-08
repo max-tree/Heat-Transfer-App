@@ -94,6 +94,5 @@ private:
 
 void configure_reader(vtkExodusIIReader* reader, QString filename);
 void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data);
-double calculate_distance_from_the_origin(double pt[3]);
 
 #endif // MAINWINDOW_H
