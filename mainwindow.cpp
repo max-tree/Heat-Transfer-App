@@ -1,14 +1,3 @@
-//-------------------------------------------------------
-// Filename: mainwindow.cpp
-//
-// Description:  The cpp file for the VTK Exodus Reader Example.
-//
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
-//
-// Creation Date: 11/12/2020
-//
-// Owner: Corey McBride
-//-------------------------------------------------------
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
@@ -25,9 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     add_window_to_rendering();
     setup();
     set_background_render(lightGrey);
-
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -43,11 +30,11 @@ void MainWindow::setup()
         return;
 
     vtkNew<vtkExodusIIReader> reader;
+
     configure_reader(reader, filename);
     iterate(reader);
     create_geometry(reader);
     create_mouse_interactor();
-//    render_this_instance();
 }
 
 void MainWindow::add_window_to_rendering()
@@ -72,7 +59,6 @@ void MainWindow::create_geometry(vtkExodusIIReader* reader)
     vtkNew<vtkCompositeDataGeometryFilter> geometry;
     geometry->SetInputConnection(reader->GetOutputPort());
     create_mapper(geometry);
-
 }
 
 void MainWindow::create_layout()
@@ -161,6 +147,7 @@ void configure_reader(vtkExodusIIReader* reader, QString filename)
 int get_number_of_points(vtkIdType numberOfPoints)
 {
     int numOfPts{0};
+
     for(int index=0;index<numberOfPoints;index++)
     {
         numOfPts++;
@@ -171,9 +158,10 @@ int get_number_of_points(vtkIdType numberOfPoints)
 void debugging_data_filler(vtkDoubleArray* &data, vtkIdType numberOfPoints)
 {
     double debugFiller{0.5};
+
     for(int index=0;index<numberOfPoints;index++)
     {
-    data->InsertNextValue(debugFiller);
+        data->InsertNextValue(debugFiller);
     }
 }
 
@@ -187,19 +175,9 @@ void MainWindow::fill_data_array(vtkUnstructuredGrid* unstructuredGrid, vtkDoubl
     debugging_data_filler(data, numberOfPoints);
 
     HTW.create_new_heat_transfer_nodes(numOfPts, points);
-
     HTW.set_deltaX_and_deltaY(calculate_distance_between_two_nodes(HTW.nodeStorage[0],HTW.nodeStorage[1]));
-
     HTW.identify_all_node_neighbors();
-
-    qDebug()<< "Node neighbors of node zero are ";
-    qDebug()<< HTW.nodeStorage[20]->conditionAboveNode;
-    qDebug()<< HTW.nodeStorage[20]->conditionBelowNode;
-    qDebug()<< HTW.nodeStorage[20]->conditionToTheLeftOfTheNode;
-    qDebug()<< HTW.nodeStorage[20]->conditionToTheRightOfTheNode;
 }
-
-
 
 void set_the_new_data_on_the_mesh(vtkUnstructuredGrid* unstructuredGrid, vtkDoubleArray* data)
 {
@@ -210,5 +188,4 @@ void MainWindow::transfer_heat_transfer_data_to_mouse_event_class()
 {
     style->nodeXCoodrinateStorage = HTW.nodeXCoordinates;
     style->nodeYCoordinateStorage = HTW.nodeYCoordinates;
-
 }

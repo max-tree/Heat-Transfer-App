@@ -49,8 +49,6 @@ TEST(IdentifyNeighborNodes, WhenNodeStorageVectorHasASizeOfZero_ExpectFalseNodeT
     test_neighbor_results(HTW, expectedResult);
 }
 
-
-
 TEST(IdentifyNeighborNodes, WhenNodeHasOneNeighborOnTheLeft_ExpectCorrectNeighbor)
 {
     HeatTransferWorld HTW;

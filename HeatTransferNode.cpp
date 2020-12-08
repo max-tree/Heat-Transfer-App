@@ -165,7 +165,6 @@ bool has_a_plane_surface_with_convection_on_the_top(HeatTransferNode* node)
     }
 }
 
-
 void identify_heat_transfer_node_case_id(HeatTransferNode* node)
 {
     if(node->specialConditionInternalCornerBottomRight != NOT_INITIALIZED)

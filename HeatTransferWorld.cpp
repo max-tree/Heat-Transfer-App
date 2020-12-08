@@ -84,7 +84,6 @@ void HeatTransferWorld::create_new_heat_transfer_nodes(int numberOfPoints, vtkSm
     }
 }
 
-
 bool is_a_neighbor_on_top(HeatTransferNode* node1, HeatTransferNode* node2)
 {
     if(node2->yCoordinate - node1->yCoordinate == 1)

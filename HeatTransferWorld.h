@@ -36,28 +36,31 @@ class HeatTransferWorld
 public:
     HeatTransferWorld(){}
     ~HeatTransferWorld();
+
     std::array <double,6> get_node_equation_coefficients();
-    std::vector <HeatTransferNode*> nodeStorage;
+    std::vector <HeatTransferNode*> nodeStorage; 
+    std::vector <double> nodeXCoordinates;
+    std::vector <double> nodeYCoordinates;
+
     void get_node_equation(int nodeCaseIdNum);
     void set_top_convection_coefficient(double hNew);
     void set_bottom_convection_coefficient(double hNew);
+    void set_thermal_conductivity(double kNew);
+    void set_free_stream_temperature(double freeStreamTempNew);
+    void set_deltaX_and_deltaY(double newDeltaX);
+    void set_coefficients(std::array <double,6> coefficients);
+    void identify_neighbor_nodes(int nodeIndex, int numberOfNodes);
+    void identify_all_node_neighbors();
+    void identities_specific_to_the_turbine_blade_mesh(int index);
+    void create_new_heat_transfer_nodes(int numberOfPoints, vtkSmartPointer<vtkPoints> points);
+
     double get_top_convection_coefficient();
     double get_bottom_convection_coefficient();
     double get_deltaX();
     double get_deltaY();
     double get_thermal_conductivity();
-    void set_thermal_conductivity(double kNew);
     double get_free_stream_temperature();
-    void set_free_stream_temperature(double freeStreamTempNew);
-    void set_deltaX_and_deltaY(double newDeltaX);
-    void set_coefficients(std::array <double,6> coefficients);
-    void identify_neighbor_nodes(int nodeIndex, int numberOfNodes);
     double numberOfNodes{0.0};
-    std::vector <double> nodeXCoordinates;
-    std::vector <double> nodeYCoordinates;
-    void identify_all_node_neighbors();
-    void identities_specific_to_the_turbine_blade_mesh(int index);
-    void create_new_heat_transfer_nodes(int numberOfPoints, vtkSmartPointer<vtkPoints> points);
 
 private:
     std::array <double,6> nodeEquationCoefficients{0.0,0.0,0.0,0.0,0.0,0.0};

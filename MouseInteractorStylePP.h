@@ -18,6 +18,7 @@
 
 #include <vector>
 #include "math.h"
+#include <QMessageBox>
 
 class MouseInteractorStylePP : public vtkInteractorStyleTrackballCamera
 {
@@ -27,15 +28,13 @@ public:
     vtkTypeMacro(MouseInteractorStylePP, vtkInteractorStyleTrackballCamera);
 
     virtual void OnLeftButtonDown() override;
-    void debugMouseClickEvent(double coordinateClicked[3]);
-    void calculate_nearest_node();
+    int calculate_nearest_node();
 
     double coordinateClicked[3]{0.0,0.0,0.0};
     std::vector <double> nodeXCoodrinateStorage;
     std::vector <double> nodeYCoordinateStorage;
-
 };
 
-void debugMouseClickEvent(double picked[3]);
+void display_nearest_node(int nearestNode);
 
 #endif // MOUSEINTERACTORSTYLEPP_H

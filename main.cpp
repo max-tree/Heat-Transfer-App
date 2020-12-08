@@ -1,18 +1,16 @@
 //-------------------------------------------------------
 // Filename: main.cpp
 //
-// Description:  The cpp file for the qt5 bullet bouncy ball example.
+// Description:  Finite Difference Heat Transfer Application.
 //
-// Creator:  Professor Corey McBride for MEEN 570 - Brigham Young University
+// Creation Date: 12/8/2020
 //
-// Creation Date: 11/8/2018
-//
-// Owner: Corey McBride
+// Owner: Maxwell Tree
+// Built off of an example by: Corey McBride and others.
 //-------------------------------------------------------
 #include <QApplication>
 #include "mainwindow.h"
 #include <QVTKOpenGlWidget.h>
-//Consider using QDebug to be able to debug stuff like normal.
 
 int main(int argc, char *argv[])
 {
