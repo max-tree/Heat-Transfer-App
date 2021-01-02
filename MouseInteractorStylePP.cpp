@@ -48,6 +48,4 @@ void MouseInteractorStylePP::OnLeftButtonDown()
                                       this->Interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
   this->Interactor->GetPicker()->GetPickPosition(coordinateClicked);
   display_nearest_node(calculate_nearest_node());
-
-  vtkInteractorStyleTrackballCamera::OnLeftButtonDown();
 }
